@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">BuckupAPK</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_main2">Main2Activity</string>
+    <string name="app_name">BackupAPK</string>
+    <string name="backup">备份</string>
 </resources>
