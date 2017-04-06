@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mAdapter = new RecyclerViewAdapter(mItems = new Items());
-        mAdapter.register(ApkEntity.class, new ApkEntityItemComponent(mAdapter));
+        mAdapter.register(ApkEntity.class, new ApkEntityItemProvider(mAdapter));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         mRecyclerView.setAdapter(mAdapter);

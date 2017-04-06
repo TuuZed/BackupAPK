@@ -9,18 +9,18 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import io.github.tuuzed.adapter.ItemComponent;
+import io.github.tuuzed.adapter.ItemProvider;
 import io.github.tuuzed.adapter.RecyclerViewAdapter;
 import io.github.tuuzed.backupapk.entity.ApkEntity;
 
 /**
  * @author TuuZed
  */
-public class ApkEntityItemComponent implements ItemComponent<ApkEntity, ApkEntityItemComponent.ViewHolder> {
+public class ApkEntityItemProvider extends ItemProvider<ApkEntity, ApkEntityItemProvider.ViewHolder> {
 
     private RecyclerViewAdapter mAdapter;
 
-    public ApkEntityItemComponent(RecyclerViewAdapter adapter) {
+    public ApkEntityItemProvider(RecyclerViewAdapter adapter) {
         mAdapter = adapter;
     }
 
@@ -43,11 +43,11 @@ public class ApkEntityItemComponent implements ItemComponent<ApkEntity, ApkEntit
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup) {
-        LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, LayoutInflater inflater) {
         View view = inflater.inflate(R.layout.item, viewGroup, false);
         return new ViewHolder(view);
     }
+
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         CheckBox checkbox;
