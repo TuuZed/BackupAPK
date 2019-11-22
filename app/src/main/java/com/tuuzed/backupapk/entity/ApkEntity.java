@@ -1,4 +1,4 @@
-package io.github.tuuzed.backupapk.entity;
+package com.tuuzed.backupapk.entity;
 
 import android.graphics.drawable.Drawable;
 

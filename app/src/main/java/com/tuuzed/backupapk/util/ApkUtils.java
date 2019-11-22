@@ -1,4 +1,4 @@
-package io.github.tuuzed.backupapk.util;
+package com.tuuzed.backupapk.util;
 
 import android.app.Activity;
 import android.content.pm.ApplicationInfo;
@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.tuuzed.backupapk.entity.ApkEntity;
+import com.tuuzed.backupapk.entity.ApkEntity;
 
 /**
  * @author TuuZed

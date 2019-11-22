@@ -1,7 +1,5 @@
-package io.github.tuuzed.backupapk;
+package com.tuuzed.backupapk;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,18 +7,21 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import io.github.tuuzed.adapter.ItemProvider;
-import io.github.tuuzed.adapter.RecyclerViewAdapter;
-import io.github.tuuzed.backupapk.entity.ApkEntity;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.tuuzed.backupapk.entity.ApkEntity;
+import com.tuuzed.common.recyclerview.ItemViewBinder;
+import com.tuuzed.common.recyclerview.RecyclerViewAdapter;
 
 /**
  * @author TuuZed
  */
-public class ApkEntityItemProvider extends ItemProvider<ApkEntity, ApkEntityItemProvider.ViewHolder> {
+public class ApkEntityItemViewBinder implements ItemViewBinder<ApkEntity, ApkEntityItemViewBinder.ViewHolder> {
 
     private RecyclerViewAdapter mAdapter;
 
-    public ApkEntityItemProvider(RecyclerViewAdapter adapter) {
+    public ApkEntityItemViewBinder(RecyclerViewAdapter adapter) {
         mAdapter = adapter;
     }
 
@@ -43,8 +44,9 @@ public class ApkEntityItemProvider extends ItemProvider<ApkEntity, ApkEntityItem
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, LayoutInflater inflater) {
-        View view = inflater.inflate(R.layout.item, viewGroup, false);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View view = inflater.inflate(R.layout.item, parent, false);
         return new ViewHolder(view);
     }
 

@@ -1,12 +1,9 @@
-package io.github.tuuzed.backupapk;
+package com.tuuzed.backupapk;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,21 +11,24 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.tuuzed.backupapk.entity.ApkEntity;
+import com.tuuzed.backupapk.util.ApkUtils;
+import com.tuuzed.backupapk.widget.DividerItemDecoration;
+import com.tuuzed.common.recyclerview.RecyclerViewAdapter;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.github.tuuzed.adapter.Items;
-import io.github.tuuzed.adapter.RecyclerViewAdapter;
-import io.github.tuuzed.backupapk.entity.ApkEntity;
-import io.github.tuuzed.backupapk.util.ApkUtils;
-import io.github.tuuzed.backupapk.widget.DividerItemDecoration;
 
 
 public class MainActivity extends AppCompatActivity {
     private ProgressBar mProgressBar;
     private RecyclerView mRecyclerView;
-    private Items mItems;
     private RecyclerViewAdapter mAdapter;
 
     @Override
@@ -39,14 +39,15 @@ public class MainActivity extends AppCompatActivity {
         initData();
     }
 
+    @SuppressLint("StaticFieldLeak")
     private void initData() {
         new AsyncTask<Void, Integer, List<ApkEntity>>() {
             @Override
             protected void onPostExecute(List<ApkEntity> list) {
                 super.onPostExecute(list);
                 mProgressBar.setVisibility(View.GONE);
-                mItems.clear();
-                mItems.addAll(list);
+                mAdapter.getItems().clear();
+                mAdapter.getItems().addAll(list);
                 mAdapter.notifyDataSetChanged();
             }
 
@@ -60,8 +61,8 @@ public class MainActivity extends AppCompatActivity {
     private void initViews() {
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        mAdapter = new RecyclerViewAdapter(mItems = new Items());
-        mAdapter.register(ApkEntity.class, new ApkEntityItemProvider(mAdapter));
+        mAdapter = new RecyclerViewAdapter();
+        mAdapter.bind(ApkEntity.class, new ApkEntityItemViewBinder(mAdapter));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         mRecyclerView.setAdapter(mAdapter);
@@ -95,12 +96,13 @@ public class MainActivity extends AppCompatActivity {
         final AlertDialog dialog = builder.setView(view).create();
         dialog.show();
         List<ApkEntity> list = new ArrayList<>();
-        for (Object obj : mItems) {
+        for (Object obj : mAdapter.getItems()) {
             if (obj instanceof ApkEntity) {
                 list.add((ApkEntity) obj);
             }
         }
         final int count = list.size();
+        @SuppressLint("StaticFieldLeak")
         AsyncTask<List<ApkEntity>, Integer, Void> task = new AsyncTask<List<ApkEntity>, Integer, Void>() {
             @Override
             protected void onProgressUpdate(Integer... values) {
@@ -111,8 +113,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
+            @SafeVarargs
             @Override
-            protected Void doInBackground(List<ApkEntity>... params) {
+            protected final Void doInBackground(List<ApkEntity>... params) {
                 List<ApkEntity> list = params[0];
                 for (int i = 0; i < list.size(); i++) {
                     ApkEntity entity = list.get(i);
